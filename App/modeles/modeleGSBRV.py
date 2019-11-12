@@ -37,6 +37,7 @@ def seConnecter( matricule , mdp ) :
 					) 
 					and t1.tra_role <> 'Responsable'
 					and Visiteur.vis_matricule = %s
+					and Visiteur.vis_mdp = %s
 				'''
 
 		curseur.execute( requete , ( matricule , ) )
@@ -263,6 +264,33 @@ def enregistrerEchantillonsOfferts( matricule , numRapport , echantillons ) :
 
 	except :
 		return None
+
+def getMotifs():
+	try :
+		curseur = getConnexionBD().cursor()
+		requete = '''
+					select mot_id , mot_libelle,mot_precision
+					from Motif
+				'''
+		
+		curseur.execute( requete , () )
+		
+		enregistrements = curseur.fetchall()
+		
+		motifs = []
+		for unEnregistrement in enregistrements :
+			unMotif = {}
+			unMotif[ 'mot_id' ] = unEnregistrement[ 0 ]
+			unMotif[ 'mot_libelle' ] = unEnregistrement[ 1 ]
+			unMotif[ 'mot_precision' ] = unEnregistrement[ 2 ]
+			motifs.append( unMotif )
+			
+		curseur.close()
+		return motifs
+		
+	except :
+		return None
+		
 
 		
 if __name__ == '__main__' :
