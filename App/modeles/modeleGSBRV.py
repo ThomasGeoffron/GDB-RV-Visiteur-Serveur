@@ -37,9 +37,10 @@ def seConnecter( matricule , mdp ) :
 					) 
 					and t1.tra_role <> 'Responsable'
 					and Visiteur.vis_matricule = %s
+					and Visiteur.vis_mdp = %s
 				'''
 
-		curseur.execute( requete , ( matricule , ) )
+		curseur.execute( requete , ( matricule , mdp ) )
 		
 		enregistrement = curseur.fetchone()
 		
@@ -185,6 +186,32 @@ def getMedicaments() :
 		return None
 
 
+def getMotifs():
+	
+	try :
+		curseur = getConnexionBD().cursor()
+		requete = '''
+					select mot_id, mot_libelle, mot_precision 
+					from Motif
+				'''
+				
+		curseur.execute( requete , () )
+		
+		enregistrements = curseur.fetchall()
+		
+		motifs = []
+		for unEnregistrement in enregistrements :
+			unMotif = {}
+			unMotif['mot_id'] = unEnregistrement[0]
+			unMotif['mot_libelle'] = unEnregistrement[1]
+			unMotif['mot_precision'] = unEnregistrement[2]
+			motifs.append(unMotif)
+		
+		curseur.close()
+		return motifs
+	
+	except :
+		return None
 	
 
 def genererNumeroRapportVisite( matricule ) :
@@ -238,6 +265,8 @@ def enregistrerRapportVisite( matricule , numPraticien , dateVisite , bilan ) :
 
 	else :
 		return None
+
+
 		
 		
 def enregistrerEchantillonsOfferts( matricule , numRapport , echantillons ) :
@@ -306,6 +335,11 @@ if __name__ == '__main__' :
 		print enregistrerEchantillonsOfferts( 'a131' , 1 , echantillons )
 		print
 		'''
+		
+		print('Liste des motifs : ')
+		for unMotif in getMotifs():
+			print(unMotif)
+		print
 		
 		print 'Liste des medicaments offerts par le visiteur a131 lors de sa 1ère visite :'
 		for uneOffre in getEchantillonsOfferts( 'a131' , 1 ) :

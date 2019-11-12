@@ -290,10 +290,10 @@ CREATE TABLE RapportVisite (
   rap_num int(11) NOT NULL DEFAULT '0',
   rap_date_visite date NOT NULL,
   rap_bilan varchar(510) DEFAULT '',
-  rap_coeff_confiance int DEFAULT '0',
-  rap_date_saisie date NOT NULL,
+  rap_coeff_confiance int DEFAULT 0,
+  rap_date_saisie date DEFAULT NULL,
   pra_num int(11) DEFAULT NULL,
-  mot_id varchar(4) DEFAULT '',
+  mot_id varchar(4) DEFAULT NULL,
   PRIMARY KEY (vis_matricule,rap_num),
   CHECK (rap_coeff_confiance >= 0 AND rap_coeff_confiance <= 5)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
